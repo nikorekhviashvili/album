@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Your Album Name - Windows 98 Music Player</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "MS Sans Serif", sans-serif;
+        overflow: hidden;
+        min-height: 100vh;
+        user-select: none;
+      }
+      
+      /* Windows 98 Desktop Background */
+      #desktop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: calc(100vh - 28px); /* Account for taskbar */
+        background-color: #008080; /* Classic Windows 98 teal */
+        background-image: url('./background.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      
+        /*background-image: 
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px
+          );
+      }
+      }
+      /* Desktop Icons */
+      .desktop-icon {
+        position: absolute;
+        width: 80px;
+        text-align: center;
+        cursor: pointer;
+        padding: 4px;
+      }
+      
+      .desktop-icon:hover {
+        background: rgba(0, 0, 128, 0.3);
+        outline: 1px dotted #000;
+      }
+      
+      .desktop-icon img {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
+        image-rendering: pixelated;
+      }
+      
+      .desktop-icon span {
+        display: block;
+        color: white;
+        text-shadow: 1px 1px 1px black;
+        font-size: 11px;
+        word-wrap: break-word;
+      }
+      
+      /* Webamp Container */
+      #app {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+      
+      /* Windows 98 Taskbar */
+      .taskbar {
+          position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 28px;
+        background-color: #c0c0c0;
+        border-top: 2px solid #ffffff;
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        }
+        
+      .start-button {
+        height: 22px;
+        margin: 0 2px;
+        padding: 0 4px;
+        min-width: 54px;
+        font-weight: bold;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        }
+        
+      .start-icon {
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(45deg, #ff0000 25%, #00ff00 25%, #00ff00 50%, #0000ff 50%, #0000ff 75%, #ffff00 75%);
+        }
+        
+      .taskbar-clock {
+        margin-left: auto;
+        margin-right: 8px;
+        padding: 0 8px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        border: 1px inset #c0c0c0;
+        background: #c0c0c0;
+        font-size: 11px;
+      }
+      
+      /* About Window (hidden by default) */
+      .about-window, .links-window, .inspiration-window {
+        display: none;
+        position: absolute;
+        z-index: 50;
+      }
+      
+      .about-window {
+        top: 80px;
+        left: 80px;
+      }
+      
+      .links-window {
+        top: 120px;
+        left: 200px;
+      }
+      
+      .inspiration-window {
+        top: 160px;
+        left: 320px;
+      }
+      
+      .about-window.active, .links-window.active, .inspiration-window.active {
+        display: block;
+      }
+      
+      /* Fix window body styling for proper contrast */
+      .window-body {
+        background-color: white !important;
+        color: black !important;
+        font-family: "MS Sans Serif", Tahoma, sans-serif;
+        font-size: 11px;
+      }
+      
+      /* Note field styling */
+      .note-content {
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        background-color: white;
+        color: black;
+        padding: 8px;
+      }
+      
+      /* Ensure consistent heading styles */
+      .window-body h3, .window-body h4 {
+        font-family: "MS Sans Serif", Tahoma, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        margin: 0 0 8px 0;
+      }
+      
+      /* Make title bars draggable cursor */
+      .title-bar {
+        cursor: move;
+      }
+      
+      /* Links list styling */
+      .links-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .links-list li {
+        margin: 8px 0;
+      }
+      
+      .links-list a {
+        color: #0000FF;
+        text-decoration: underline;
+      }
+      
+      /* Inspiration videos */
+      .inspiration-list {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      
+      .inspiration-item {
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #c0c0c0;
+      }
+      
+      .inspiration-item:last-child {
+        border-bottom: none;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        #app {
+          transform: translate(-50%, -50%) scale(0.8);
+        }
+        
+        .desktop-icon {
+          width: 60px;
+        }
+        
+        .desktop-icon img {
+          width: 24px;
+          height: 24px;
+        }
+        
+        .desktop-icon span {
+          font-size: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="desktop">
+      <!-- Desktop Icons -->
+      <div class="desktop-icon" style="top: 20px; left: 20px;" onclick="toggleWindow('about')">
+        <img src="./icons/About This.png" alt="About This">
+        <span>About This</span>
+      </div>
+      
+      <div class="desktop-icon" style="top: 20px; left: 120px;" onclick="toggleWindow('links')">
+        <img src="./icons/Links.png" alt="Links">
+        <span>Links</span>
+      </div>
+      
+      <div class="desktop-icon" style="top: 120px; left: 20px;" onclick="toggleWindow('inspiration')">
+        <img src="./icons/Inspiration.png" alt="Inspiration">
+        <span>Inspiration</span>
+      </div>
+      
+      <!-- About Window -->
+      <div class="about-window" id="aboutWindow">
+        <div class="window" style="width: 400px">
+          <div class="title-bar">
+            <div class="title-bar-text">About This Album</div>
+            <div class="title-bar-controls">
+              <button aria-label="Close" onclick="toggleWindow('about')"></button>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="note-content">
+Self titled
+by Whitmo, Niko with K
+Released: 2024
+
+This album is a journey through...
+
+[Add your album story here. Talk about the creative process, 
+what inspired you, the themes you explored, and anything else 
+you want to share with your listeners.]
+
+Track List:
+1. Riverb - 2:30
+2. Syche - 3:36  
+3. Gata Salvaje - 2:50
+4. Mukha - 2:43
+5. Marusa is sneezing - 2:25
+
+Thank you for listening!
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Links Window -->
+      <div class="links-window" id="linksWindow">
+        <div class="window" style="width: 300px">
+          <div class="title-bar">
+            <div class="title-bar-text">Links</div>
+            <div class="title-bar-controls">
+              <button aria-label="Close" onclick="toggleWindow('links')"></button>
+            </div>
+          </div>
+          <div class="window-body">
+            <h4>Listen & Follow</h4>
+            <ul class="links-list">
+              <li>🎵 <a href="https://spotify.com" target="_blank">Spotify</a></li>
+              <li>🎵 <a href="https://apple.com/music" target="_blank">Apple Music</a></li>
+              <li>📱 <a href="https://instagram.com/yourband" target="_blank">Instagram</a></li>
+              <li>🐦 <a href="https://twitter.com/yourband" target="_blank">Twitter</a></li>
+              <li>📺 <a href="https://youtube.com/@yourband" target="_blank">YouTube</a></li>
+              <li>💿 <a href="https://bandcamp.com" target="_blank">Bandcamp</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Inspiration Window -->
+      <div class="inspiration-window" id="inspirationWindow">
+        <div class="window" style="width: 500px">
+          <div class="title-bar">
+            <div class="title-bar-text">Inspiration</div>
+            <div class="title-bar-controls">
+              <button aria-label="Close" onclick="toggleWindow('inspiration')"></button>
+            </div>
+          </div>
+          <div class="window-body">
+            <h4>Songs & Videos That Inspired This Album</h4>
+            <div class="inspiration-list">
+              <div class="inspiration-item">
+                <strong>Artist Name - Song Title</strong><br>
+                <a href="https://youtube.com/watch?v=..." target="_blank">Watch on YouTube</a><br>
+                <small>This song inspired the mood of track 2...</small>
+              </div>
+              
+              <div class="inspiration-item">
+                <strong>Another Artist - Another Song</strong><br>
+                <a href="https://youtube.com/watch?v=..." target="_blank">Watch on YouTube</a><br>
+                <small>The production style influenced our approach...</small>
+              </div>
+              
+              <div class="inspiration-item">
+                <strong>Documentary/Film Name</strong><br>
+                <a href="https://youtube.com/watch?v=..." target="_blank">Watch on YouTube</a><br>
+                <small>The themes in this film shaped the album concept...</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Webamp Player -->
+      <div id="app">
+        <!-- Webamp will render here -->
+      </div>
+      </div>
+      
+    <!-- Windows 98 Taskbar -->
+    <div class="taskbar">
+      <button class="start-button">
+        <div class="start-icon"></div>
+        Start
+      </button>
+      <div class="taskbar-clock" id="clock">12:00 PM</div>
+    </div>
+
+    <script src="https://unpkg.com/webamp@1.4.2/built/webamp.bundle.min.js"></script>
+    <script>
+      // Initialize Webamp
+      const Webamp = window.Webamp;
+      const webamp = new Webamp({
+        initialTracks: [
+          {
+            metaData: {
+              artist: "Whitmo, Niko with K",
+              title: "Riverb",
+              album: "Self titled"
+            },
+            url: "./music/Riverb.wav",
+            duration: 150, // 2:30
+          },
+          {
+            metaData: {
+              artist: "Whitmo, Niko with K",
+              title: "Syche",
+              album: "Self titled"
+            },
+            url: "./music/Syche.wav",
+            duration: 216, // 3:36
+          },
+          {
+            metaData: {
+              artist: "Whitmo, Niko with K",
+              title: "Gata Salvaje",
+              album: "Self titled"
+            },
+            url: "./music/Gata Salvaje.wav",
+            duration: 170, // 2:50
+          },
+          {
+            metaData: {
+              artist: "Whitmo, Niko with K",
+              title: "Mukha",
+              album: "Self titled"
+            },
+            url: "./music/Mukha.wav",
+            duration: 163, // 2:43
+          },
+          {
+            metaData: {
+              artist: "Whitmo, Niko with K",
+              title: "Marusa is sneezing",
+              album: "Self titled"
+            },
+            url: "./music/Marusa is sneezing.wav",
+            duration: 145, // 2:25
+          }
+        ],
+      });
+
+      webamp.renderWhenReady(document.getElementById("app"));
+      
+      // Toggle Window - Modified to allow multiple windows
+      function toggleWindow(windowType) {
+        const windows = {
+          'about': document.getElementById('aboutWindow'),
+          'links': document.getElementById('linksWindow'),
+          'inspiration': document.getElementById('inspirationWindow')
+        };
+        
+        const targetWindow = windows[windowType];
+        
+        // Simply toggle the target window without closing others
+        if (targetWindow.classList.contains('active')) {
+          targetWindow.classList.remove('active');
+        } else {
+          targetWindow.classList.add('active');
+          // Bring to front
+          targetWindow.style.zIndex = getHighestZIndex() + 1;
+        }
+      }
+      
+      // Helper function to get the highest z-index
+      function getHighestZIndex() {
+        const elements = document.querySelectorAll('.about-window, .links-window, .inspiration-window');
+        let highest = 50;
+        elements.forEach(el => {
+          const zIndex = parseInt(window.getComputedStyle(el).zIndex) || 0;
+          if (zIndex > highest) highest = zIndex;
+        });
+        return highest;
+      }
+      
+      // Make windows come to front when clicked
+      function bringToFront(windowElement) {
+        windowElement.addEventListener('mousedown', function() {
+          this.style.zIndex = getHighestZIndex() + 1;
+        });
+      }
+      
+      // Update clock
+      function updateClock() {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours % 12 || 12;
+        document.getElementById('clock').textContent = `${displayHours}:${minutes} ${ampm}`;
+      }
+      
+      updateClock();
+      setInterval(updateClock, 60000);
+      
+      // Start button functionality
+      document.querySelector('.start-button').addEventListener('click', function() {
+        alert('Start Menu - Coming Soon!\n\n• Programs\n• Documents\n• Settings\n• Find\n• Help\n• Run...\n• Shut Down...');
+      });
+      
+      // Make windows draggable
+      function makeDraggable(windowElement) {
+        const titleBar = windowElement.querySelector('.title-bar');
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+        
+        function dragStart(e) {
+          if (e.target === titleBar || titleBar.contains(e.target)) {
+            // Don't start drag if clicking the close button
+            if (e.target.getAttribute('aria-label') === 'Close') {
+              return;
+            }
+            
+            isDragging = true;
+            
+            if (e.type === "touchstart") {
+              initialX = e.touches[0].clientX - xOffset;
+              initialY = e.touches[0].clientY - yOffset;
+            } else {
+              initialX = e.clientX - xOffset;
+              initialY = e.clientY - yOffset;
+            }
+            
+            windowElement.style.zIndex = 1000; // Bring to front
+          }
+        }
+        
+        function dragEnd(e) {
+          initialX = currentX;
+          initialY = currentY;
+          isDragging = false;
+          windowElement.style.zIndex = 50;
+        }
+        
+        function drag(e) {
+          if (isDragging) {
+            e.preventDefault();
+            
+            if (e.type === "touchmove") {
+              currentX = e.touches[0].clientX - initialX;
+              currentY = e.touches[0].clientY - initialY;
+            } else {
+              currentX = e.clientX - initialX;
+              currentY = e.clientY - initialY;
+            }
+            
+            xOffset = currentX;
+            yOffset = currentY;
+            
+            windowElement.style.transform = `translate(${currentX}px, ${currentY}px)`;
+          }
+        }
+        
+        // Mouse events
+        titleBar.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        
+        // Touch events for mobile
+        titleBar.addEventListener('touchstart', dragStart);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('touchend', dragEnd);
+      }
+      
+      // Initialize draggable windows
+      document.addEventListener('DOMContentLoaded', function() {
+        const aboutWindow = document.getElementById('aboutWindow');
+        const linksWindow = document.getElementById('linksWindow');
+        const inspirationWindow = document.getElementById('inspirationWindow');
+        
+        makeDraggable(aboutWindow);
+        makeDraggable(linksWindow);
+        makeDraggable(inspirationWindow);
+        
+        // Make windows come to front when clicked
+        bringToFront(aboutWindow);
+        bringToFront(linksWindow);
+        bringToFront(inspirationWindow);
+      });
+    </script>
+  </body>
+</html> 
