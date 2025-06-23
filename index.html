@@ -83,6 +83,22 @@
         z-index: 10;
       }
       
+      /* Fix Webamp overflow issue */
+      #webamp {
+        overflow: visible !important;
+      }
+      
+      /* Fix for middle section protrusion */
+      #webamp .window {
+        overflow: visible !important;
+      }
+      
+      /* Ensure Webamp components don't have unwanted overflow */
+      #webamp #equalizer-window,
+      #webamp #playlist-window {
+        overflow: visible !important;
+      }
+      
       /* Windows 98 Taskbar */
       .taskbar {
           position: fixed;
@@ -247,12 +263,12 @@
         <span>About This</span>
       </div>
       
-      <div class="desktop-icon" style="top: 20px; left: 120px;" onclick="toggleWindow('links')">
+      <div class="desktop-icon" style="top: 120px; left: 20px;" onclick="toggleWindow('links')">
         <img src="./icons/Links.png" alt="Links">
         <span>Links</span>
       </div>
       
-      <div class="desktop-icon" style="top: 120px; left: 20px;" onclick="toggleWindow('inspiration')">
+      <div class="desktop-icon" style="top: 220px; left: 20px;" onclick="toggleWindow('inspiration')">
         <img src="./icons/Inspiration.png" alt="Inspiration">
         <span>Inspiration</span>
       </div>
@@ -270,13 +286,9 @@
             <div class="note-content">
 Self titled
 by Whitmo, Niko with K
-Released: 2024
+Released: 2025
 
-This album is a journey through...
-
-[Add your album story here. Talk about the creative process, 
-what inspired you, the themes you explored, and anything else 
-you want to share with your listeners.]
+We probably need to add some context here.
 
 Track List:
 1. Riverb - 2:30
@@ -472,7 +484,7 @@ Thank you for listening!
       
       // Start button functionality
       document.querySelector('.start-button').addEventListener('click', function() {
-        alert('Start Menu - Coming Soon!\n\n• Programs\n• Documents\n• Settings\n• Find\n• Help\n• Run...\n• Shut Down...');
+        alert('What did you expect in a start menu?');
       });
       
       // Make windows draggable
