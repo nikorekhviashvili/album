@@ -21,9 +21,9 @@
         left: 0;
         width: 100vw;
         height: calc(100vh - 28px); /* Account for taskbar */
-        background-color: #008080; /* Classic Windows 98 teal */
-        background-image: url('./background.png');
-        background-size: cover;
+        background-color: #10413D;
+        background-image: url('./background.webp');
+        background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
       }
@@ -149,22 +149,22 @@
         position: absolute;
         z-index: 50;
       }
-      
+
       .about-window {
         top: 80px;
         left: 80px;
       }
-      
+
       .links-window {
         top: 120px;
         left: 200px;
       }
-      
+
       .inspiration-window {
         top: 160px;
         left: 320px;
       }
-      
+
       .about-window.active, .links-window.active, .inspiration-window.active {
         display: block;
       }
@@ -232,7 +232,7 @@
       .inspiration-item:last-child {
         border-bottom: none;
       }
-      
+
       /* Responsive adjustments */
       @media (max-width: 768px) {
         #app {
@@ -272,7 +272,7 @@
         <img src="./icons/Inspiration.png" alt="Inspiration">
         <span>Inspiration</span>
       </div>
-      
+
       <!-- About Window -->
       <div class="about-window" id="aboutWindow">
         <div class="window" style="width: 400px">
@@ -283,22 +283,20 @@
             </div>
           </div>
           <div class="window-body">
-            <div class="note-content">
-Self titled
-by Whitmo, Niko with K
-Released: 2025
+            <h4>Self titled</h4>
+            <p>by Whitmo, Niko with K<br>
+            Released: 2025</p>
 
-We probably need to add some context here.
+            <p>We probably need to add some context here.</p>
 
-Track List:
-1. Riverb - 2:30
-2. Syche - 3:36  
-3. Gata Salvaje - 2:50
-4. Mukha - 2:43
-5. Marusa is sneezing - 2:25
+            <h4>Track List:</h4>
+            <p>1. Riverb - 2:30<br>
+            2. Syche - 3:36<br>
+            3. Gata Salvaje - 2:50<br>
+            4. Mukha - 2:43<br>
+            5. Marusa is sneezing - 2:25</p>
 
-Thank you for listening!
-            </div>
+            <p>Thank you for listening!</p>
           </div>
         </div>
       </div>
@@ -359,7 +357,7 @@ Thank you for listening!
           </div>
         </div>
       </div>
-      
+
       <!-- Webamp Player -->
       <div id="app">
         <!-- Webamp will render here -->
@@ -438,9 +436,9 @@ Thank you for listening!
           'links': document.getElementById('linksWindow'),
           'inspiration': document.getElementById('inspirationWindow')
         };
-        
+
         const targetWindow = windows[windowType];
-        
+
         // Simply toggle the target window without closing others
         if (targetWindow.classList.contains('active')) {
           targetWindow.classList.remove('active');
@@ -450,7 +448,7 @@ Thank you for listening!
           targetWindow.style.zIndex = getHighestZIndex() + 1;
         }
       }
-      
+
       // Helper function to get the highest z-index
       function getHighestZIndex() {
         const elements = document.querySelectorAll('.about-window, .links-window, .inspiration-window');
@@ -561,11 +559,11 @@ Thank you for listening!
         const aboutWindow = document.getElementById('aboutWindow');
         const linksWindow = document.getElementById('linksWindow');
         const inspirationWindow = document.getElementById('inspirationWindow');
-        
+
         makeDraggable(aboutWindow);
         makeDraggable(linksWindow);
         makeDraggable(inspirationWindow);
-        
+
         // Make windows come to front when clicked
         bringToFront(aboutWindow);
         bringToFront(linksWindow);

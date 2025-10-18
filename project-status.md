@@ -47,13 +47,13 @@
    - Inspiration window for influences
 4. **Desktop Icons**: Custom icons that open respective windows
 5. **Styling**: Authentic Windows 98 look using 98.css library
-6. **Background**: Custom background image (background.png)
+6. **Background**: Custom background image (background.webp)
 
 ### Technical Details:
 ```
 album-website/
 ├── index.html         # Main website (all-in-one file)
-├── background.png     # Custom desktop wallpaper
+├── background.webp     # Custom desktop wallpaper
 ├── icons/            # Desktop icon images
 │   ├── About This.png
 │   ├── Inspiration.png
