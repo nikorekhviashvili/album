@@ -129,8 +129,12 @@
       .start-icon {
         width: 16px;
         height: 16px;
-        background: linear-gradient(45deg, #ff0000 25%, #00ff00 25%, #00ff00 50%, #0000ff 50%, #0000ff 75%, #ffff00 75%);
-        }
+        background-image: url('./icons/start.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        image-rendering: pixelated;
+      }
         
       .taskbar-clock {
         margin-left: auto;
@@ -143,7 +147,54 @@
         background: #c0c0c0;
         font-size: 11px;
       }
-      
+
+      /* Start Menu */
+      .start-menu {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        left: 2px;
+        width: 200px;
+        background-color: #c0c0c0;
+        border: 2px outset #ffffff;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        font-size: 11px;
+      }
+
+      .start-menu.active {
+        display: block;
+      }
+
+      .start-menu-sidebar {
+        display: none;
+      }
+
+      .start-menu-items {
+        padding: 2px;
+      }
+
+      .start-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 6px 8px;
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+        gap: 8px;
+        font-size: 11px;
+      }
+
+      .start-menu-item:hover {
+        background-color: #000080;
+        color: white;
+      }
+
+      .start-menu-item .emoji {
+        font-size: 16px;
+        width: 20px;
+      }
+
       /* About Window (hidden by default) */
       .about-window, .links-window, .inspiration-window, .paint-window {
         display: none;
@@ -355,11 +406,21 @@
       
     <!-- Windows 98 Taskbar -->
     <div class="taskbar">
-      <button class="start-button">
+      <button class="start-button" id="start-button">
         <div class="start-icon"></div>
         Start
       </button>
       <div class="taskbar-clock" id="clock">12:00 PM</div>
+    </div>
+
+    <!-- Start Menu -->
+    <div id="start-menu" class="start-menu">
+      <div class="start-menu-sidebar">
+        <span>Windows<br>98</span>
+      </div>
+      <div class="start-menu-items" id="start-menu-items">
+        <!-- Menu items loaded dynamically from links.md -->
+      </div>
     </div>
 
     <script src="https://unpkg.com/webamp@1.4.2/built/webamp.bundle.min.js"></script>
@@ -470,9 +531,26 @@
       updateClock();
       setInterval(updateClock, 60000);
       
-      // Start button functionality
-      document.querySelector('.start-button').addEventListener('click', function() {
-        alert('What did you expect in a start menu?');
+      // Start Menu functionality
+      function toggleStartMenu() {
+        const startMenu = document.getElementById('start-menu');
+        startMenu.classList.toggle('active');
+      }
+
+      // Close Start menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const startMenu = document.getElementById('start-menu');
+        const startButton = document.getElementById('start-button');
+
+        if (!startMenu.contains(event.target) && !startButton.contains(event.target)) {
+          startMenu.classList.remove('active');
+        }
+      });
+
+      // Start button click handler
+      document.getElementById('start-button').addEventListener('click', function(event) {
+        event.stopPropagation();
+        toggleStartMenu();
       });
       
       // Make windows draggable
@@ -560,6 +638,47 @@
         }
       }
 
+      // Load links from links.md and populate Start Menu
+      async function loadStartMenuLinks() {
+        try {
+          const response = await fetch('./content/links.md');
+          if (!response.ok) {
+            throw new Error('Failed to load links.md');
+          }
+          const markdown = await response.text();
+
+          // Parse markdown to extract links
+          const lines = markdown.split('\n');
+          const menuItemsContainer = document.getElementById('start-menu-items');
+
+          lines.forEach(line => {
+            // Match markdown links with emoji: - 🎵 [Spotify](https://spotify.com)
+            const linkMatch = line.match(/^-\s*(\S+)\s*\[([^\]]+)\]\(([^)]+)\)/);
+            if (linkMatch) {
+              const emoji = linkMatch[1];
+              const text = linkMatch[2];
+              const url = linkMatch[3];
+
+              // Create menu item
+              const menuItem = document.createElement('a');
+              menuItem.className = 'start-menu-item';
+              menuItem.href = url;
+              menuItem.target = '_blank';
+              menuItem.innerHTML = `<span class="emoji">${emoji}</span><span>${text}</span>`;
+
+              // Close menu when clicked
+              menuItem.addEventListener('click', function() {
+                document.getElementById('start-menu').classList.remove('active');
+              });
+
+              menuItemsContainer.appendChild(menuItem);
+            }
+          });
+        } catch (error) {
+          console.error('Error loading Start Menu links:', error);
+        }
+      }
+
       // Initialize draggable windows
       document.addEventListener('DOMContentLoaded', function() {
         const aboutWindow = document.getElementById('aboutWindow');
@@ -582,6 +701,9 @@
         loadMarkdownContent('about.md', 'about-content');
         loadMarkdownContent('links.md', 'links-content');
         loadMarkdownContent('inspiration.md', 'inspiration-content');
+
+        // Load Start Menu links
+        loadStartMenuLinks();
       });
     </script>
   </body>

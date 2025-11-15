@@ -29,3 +29,8 @@
 [Archive Website](https://citizen-dj.labs.loc.gov/loc-tony-schwartz/use/)
 
 ---
+
+**Art Farmer ''Petite Belle'' Live in England, 1964**
+[Youtube](https://www.youtube.com/watch?v=Bj81FvlsYy4)
+
+---
