@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Windows 98-themed album website for "Whitmo + Niko with K" featuring a Webamp music player in a nostalgic desktop environment. The entire website is a single-file HTML application with inline CSS and JavaScript, deployed as a static site on Vercel.
+This is a Windows 98-themed album website for "Whitmo + Niko With K" featuring a Webamp music player in a nostalgic desktop environment. The entire website is a single-file HTML application with inline CSS and JavaScript, deployed as a static site on Vercel.
 
 **Key Technologies:**
 - Pure HTML/CSS/JavaScript (no build process required)
@@ -47,10 +47,10 @@ album-1/
 ├── vercel.json            # CORS headers for static deployment
 ├── project-status.md      # Project planning/status document
 ├── music/                 # Album tracks (WAV format)
-│   ├── Riverb.wav
+│   ├── Parade.wav
 │   ├── Marusa is sneezing.wav
-│   ├── Syche.wav
-│   ├── Gata Salvaje.wav
+│   ├── The Boiler.wav
+│   ├── Crazy Cat.wav
 │   └── Mukha.wav
 └── icons/                 # Desktop icon images
     ├── About This.png

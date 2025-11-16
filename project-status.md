@@ -10,9 +10,9 @@
 ### Phase 1: Core Setup ✅ COMPLETE
 - [x] ~~Fork and setup Webamp development environment~~ → Using CDN version instead
 - [x] Replace demo tracks with your album songs (5 tracks loaded)
-  - Riverb (2:30)
-  - Syche (3:36)
-  - Gata Salvaje (2:50)
+  - Parade (2:30)
+  - The Boiler (3:36)
+  - Crazy Cat (2:50)
   - Mukha (2:43)
   - Marusa is sneezing (2:25)
 - [x] Create basic desktop environment layout
@@ -59,11 +59,11 @@ album-website/
 │   ├── Inspiration.png
 │   └── Links.png
 ├── music/            # Album tracks
-│   ├── Gata Salvaje.wav
+│   ├── Crazy Cat.wav
 │   ├── Marusa is sneezing.wav
 │   ├── Mukha.wav
-│   ├── Riverb.wav
-│   └── Syche.wav
+│   ├── Parade.wav
+│   └── The Boiler.wav
 └── vercel.json       # CORS configuration
 ```
 
