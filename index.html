@@ -218,8 +218,14 @@
         width: 20px;
       }
 
+      .start-menu-item .start-menu-icon {
+        width: 16px;
+        height: 16px;
+        image-rendering: pixelated;
+      }
+
       /* About Window (hidden by default) */
-      .about-window, .links-window, .inspiration-window, .paint-window {
+      .about-window, .inspiration-window, .paint-window {
         display: none;
         position: absolute;
         z-index: 50;
@@ -228,11 +234,6 @@
       .about-window {
         top: 80px;
         left: 80px;
-      }
-
-      .links-window {
-        top: 120px;
-        left: 200px;
       }
 
       .inspiration-window {
@@ -248,7 +249,7 @@
         /* Positioned: center + (Webamp width / 2) + spacing */
       }
 
-      .about-window.active, .links-window.active, .inspiration-window.active, .paint-window.active {
+      .about-window.active, .inspiration-window.active, .paint-window.active {
         display: block;
       }
       
@@ -282,22 +283,6 @@
       /* Make title bars draggable cursor */
       .title-bar {
         cursor: move;
-      }
-      
-      /* Links list styling */
-      .links-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      
-      .links-list li {
-        margin: 8px 0;
-      }
-      
-      .links-list a {
-        color: #0000FF;
-        text-decoration: underline;
       }
       
       /* Inspiration videos */
@@ -343,7 +328,6 @@
         
         /* Adjust window positions for mobile */
         .about-window,
-        .links-window,
         .inspiration-window {
           left: 10px !important;
           top: 10px !important;
@@ -378,9 +362,9 @@
         <span>About This</span>
       </div>
       
-      <div class="desktop-icon" style="top: 120px; left: 20px;" onclick="toggleWindow('links')">
-        <img src="./icons/Links.png" alt="Links">
-        <span>Links</span>
+      <div class="desktop-icon" style="top: 120px; left: 20px;" onclick="openSpotify()">
+        <img src="./icons/spotify.png" alt="Spotify">
+        <span>Spotify 🔗</span>
       </div>
       
       <div class="desktop-icon" style="top: 220px; left: 20px;" onclick="toggleWindow('inspiration')">
@@ -408,20 +392,6 @@
         </div>
       </div>
       
-      <!-- Links Window -->
-      <div class="links-window" id="linksWindow">
-        <div class="window" style="width: 300px">
-          <div class="title-bar">
-            <div class="title-bar-text">Links</div>
-            <div class="title-bar-controls">
-              <button aria-label="Close" onclick="toggleWindow('links')"></button>
-            </div>
-          </div>
-          <div class="window-body" id="links-content">
-            <!-- Content loaded from content/links.md -->
-          </div>
-        </div>
-      </div>
       
       <!-- Inspiration Window -->
       <div class="inspiration-window" id="inspirationWindow">
@@ -474,7 +444,7 @@
         <span>Windows<br>98</span>
       </div>
       <div class="start-menu-items" id="start-menu-items">
-        <!-- Menu items loaded dynamically from links.md -->
+        <!-- Apps populated dynamically -->
       </div>
     </div>
 
@@ -534,11 +504,18 @@
 
       webamp.renderWhenReady(document.getElementById("app"));
       
+      
+      const SPOTIFY_ALBUM_URL = 'https://open.spotify.com/album/0NWiPZLRXIQiRTUfxn4fEE?si=5IKEmO6BTbqTykPeFM8RRw';
+
+      // Open Spotify album page
+      function openSpotify() {
+        window.open(SPOTIFY_ALBUM_URL, '_blank');
+      }
+
       // Toggle Window - Modified to allow multiple windows
       function toggleWindow(windowType) {
         const windows = {
           'about': document.getElementById('aboutWindow'),
-          'links': document.getElementById('linksWindow'),
           'inspiration': document.getElementById('inspirationWindow'),
           'paint': document.getElementById('paintWindow')
         };
@@ -557,7 +534,7 @@
 
       // Helper function to get the highest z-index
       function getHighestZIndex() {
-        const elements = document.querySelectorAll('.about-window, .links-window, .inspiration-window, .paint-window');
+        const elements = document.querySelectorAll('.about-window, .inspiration-window, .paint-window');
         let highest = 50;
         elements.forEach(el => {
           const zIndex = parseInt(window.getComputedStyle(el).zIndex) || 0;
@@ -693,72 +670,70 @@
         }
       }
 
-      // Load links from links.md and populate Start Menu
-      async function loadStartMenuLinks() {
-        try {
-          const response = await fetch('./content/links.md');
-          if (!response.ok) {
-            throw new Error('Failed to load links.md');
+      // Populate Start Menu with apps
+      function populateStartMenu() {
+        const menuItemsContainer = document.getElementById('start-menu-items');
+        
+        // Define the apps for the Start Menu
+        const apps = [
+          { icon: './icons/About This.png', text: 'About This', action: () => toggleWindow('about') },
+          { icon: './icons/spotify.png', text: 'Spotify 🔗', action: () => openSpotify() },
+          { icon: './icons/Inspiration.png', text: 'Inspiration', action: () => toggleWindow('inspiration') },
+          { icon: './icons/paint.webp', text: 'Paint', action: () => toggleWindow('paint') },
+          { icon: null, text: 'Winamp', action: () => showWinamp(), emoji: '🎵' }
+        ];
+        
+        apps.forEach(app => {
+          const menuItem = document.createElement('div');
+          menuItem.className = 'start-menu-item';
+          
+          if (app.icon) {
+            menuItem.innerHTML = `<img src="${app.icon}" class="start-menu-icon"><span>${app.text}</span>`;
+          } else {
+            menuItem.innerHTML = `<span class="emoji">${app.emoji}</span><span>${app.text}</span>`;
           }
-          const markdown = await response.text();
-
-          // Parse markdown to extract links
-          const lines = markdown.split('\n');
-          const menuItemsContainer = document.getElementById('start-menu-items');
-
-          lines.forEach(line => {
-            // Match markdown links with emoji: - 🎵 [Spotify](https://spotify.com)
-            const linkMatch = line.match(/^-\s*(\S+)\s*\[([^\]]+)\]\(([^)]+)\)/);
-            if (linkMatch) {
-              const emoji = linkMatch[1];
-              const text = linkMatch[2];
-              const url = linkMatch[3];
-
-              // Create menu item
-              const menuItem = document.createElement('a');
-              menuItem.className = 'start-menu-item';
-              menuItem.href = url;
-              menuItem.target = '_blank';
-              menuItem.innerHTML = `<span class="emoji">${emoji}</span><span>${text}</span>`;
-
-              // Close menu when clicked
-              menuItem.addEventListener('click', function() {
-                document.getElementById('start-menu').classList.remove('active');
-              });
-
-              menuItemsContainer.appendChild(menuItem);
-            }
+          
+          menuItem.addEventListener('click', function() {
+            app.action();
+            document.getElementById('start-menu').classList.remove('active');
           });
-        } catch (error) {
-          console.error('Error loading Start Menu links:', error);
+          
+          menuItemsContainer.appendChild(menuItem);
+        });
+      }
+
+      // Show/focus Winamp player
+      function showWinamp() {
+        // Webamp API to show/focus the player
+        // The player is always visible, but we can ensure it's not minimized
+        // This scrolls to the player and ensures it's visible
+        const webampElement = document.getElementById('app');
+        if (webampElement) {
+          webampElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
 
       // Initialize draggable windows
       document.addEventListener('DOMContentLoaded', function() {
         const aboutWindow = document.getElementById('aboutWindow');
-        const linksWindow = document.getElementById('linksWindow');
         const inspirationWindow = document.getElementById('inspirationWindow');
         const paintWindow = document.getElementById('paintWindow');
 
         makeDraggable(aboutWindow);
-        makeDraggable(linksWindow);
         makeDraggable(inspirationWindow);
         makeDraggable(paintWindow);
 
         // Make windows come to front when clicked
         bringToFront(aboutWindow);
-        bringToFront(linksWindow);
         bringToFront(inspirationWindow);
         bringToFront(paintWindow);
 
         // Load markdown content for windows
         loadMarkdownContent('about.md', 'about-content');
-        loadMarkdownContent('links.md', 'links-content');
         loadMarkdownContent('inspiration.md', 'inspiration-content');
 
-        // Load Start Menu links
-        loadStartMenuLinks();
+        // Populate Start Menu with apps
+        populateStartMenu();
       });
     </script>
     
