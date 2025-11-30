@@ -1,3 +1,11 @@
+#### Thanks
+
+[Ika](https://www.instagram.com/ddramone/) for photography.
+
+[Ghudu](https://www.instagram.com/ghudu_/) for album art.
+
+---
+
 #### Stuff that inspired us
 
 **Dielo - Mukhambazi (1975)**
@@ -11,7 +19,7 @@
 ---
 
 **Fresa Salvaje - De cigarro en cigarro (1974)**
-[Youtube](https://www.youtube.com/watch?v=xM202h5lSUU)
+[Youtube](https://www.youtube.com/watch?v=xM203h5lSUU)
 
 ---
 

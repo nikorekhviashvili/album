@@ -368,8 +368,8 @@
       </div>
       
       <div class="desktop-icon" style="top: 220px; left: 20px;" onclick="toggleWindow('inspiration')">
-        <img src="./icons/Inspiration.png" alt="Inspiration">
-        <span>Inspiration</span>
+        <img src="./icons/Inspiration.png" alt="Links">
+        <span>Links</span>
       </div>
 
       <div class="desktop-icon" style="top: 320px; left: 20px;" onclick="toggleWindow('paint')">
@@ -393,11 +393,11 @@
       </div>
       
       
-      <!-- Inspiration Window -->
+      <!-- Links Window -->
       <div class="inspiration-window" id="inspirationWindow">
         <div class="window" style="width: 500px">
           <div class="title-bar">
-            <div class="title-bar-text">Inspiration</div>
+            <div class="title-bar-text">Links</div>
             <div class="title-bar-controls">
               <button aria-label="Close" onclick="toggleWindow('inspiration')"></button>
             </div>
@@ -678,7 +678,7 @@
         const apps = [
           { icon: './icons/About This.png', text: 'About This', action: () => toggleWindow('about') },
           { icon: './icons/spotify.png', text: 'Spotify 🔗', action: () => openSpotify() },
-          { icon: './icons/Inspiration.png', text: 'Inspiration', action: () => toggleWindow('inspiration') },
+          { icon: './icons/Inspiration.png', text: 'Links', action: () => toggleWindow('inspiration') },
           { icon: './icons/paint.webp', text: 'Paint', action: () => toggleWindow('paint') },
           { icon: null, text: 'Winamp', action: () => showWinamp(), emoji: '🎵' }
         ];
