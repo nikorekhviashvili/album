@@ -1,8 +1,12 @@
 #### Thanks
 
-[Ika](https://www.instagram.com/ddramone/) for photography.
+**Ika - photography**
+[Instagram](https://www.instagram.com/ddramone/)
 
-[Ghudu](https://www.instagram.com/ghudu_/) for album art.
+---
+
+**Ghudu - album art**
+[Instagram](https://www.instagram.com/ghudu_/)
 
 ---
 
