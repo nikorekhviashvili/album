@@ -72,6 +72,19 @@ python3 -m http.server 8000
 # Then visit http://localhost:8000
 ```
 
+### Smoke tests and previews
+`package.json` exists only for the Playwright smoke suite in `e2e/`; the site still has no build. `.vercelignore` keeps the test tooling out of Vercel uploads, so deployments stay plain static files.
+```bash
+npm ci
+npm run test:e2e        # serves the folder with python3 -m http.server on :8000
+npm run test:e2e:prove  # same, recording a video of every test
+```
+- The suite covers the Webamp player and playlist, the desktop icons, About/Links windows (markdown via marked), the Start menu, and that every track file is served, on a desktop and a phone viewport.
+- Set `BASE_URL` to test a deployed Vercel preview. `VERCEL_AUTOMATION_BYPASS_SECRET` sends `x-vercel-protection-bypass` through Deployment Protection, and turns Playwright traces off so the secret isn't recorded.
+- Screenshots are always kept; videos only on failure unless `PW_VIDEO=on`. `PW_OUTPUT_DIR` moves them (default `test-results/`).
+- GitHub Actions (`.github/workflows/ci.yml`) runs the suite on every PR and uploads the Playwright report.
+- In Claude Code cloud sessions, `.claude/hooks/session-start.sh` runs `npm ci` when `package-lock.json` changes. It does nothing locally.
+
 ### Deployment
 The site is configured for Vercel with CORS headers in `vercel.json`. To deploy:
 ```bash

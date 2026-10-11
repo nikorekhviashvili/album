@@ -1,0 +1,9 @@
+# Test tooling. Keeping package.json out of the upload means Vercel still
+# serves the site as plain static files, with no install or build step.
+package.json
+package-lock.json
+playwright.config.js
+e2e/
+.claude/
+.github/
+CLAUDE.md

@@ -1,0 +1,13 @@
+{
+  "name": "album",
+  "private": true,
+  "description": "Test tooling only. The site is static index.html and is deployed without a build.",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "test:e2e": "playwright test",
+    "test:e2e:prove": "PW_VIDEO=on playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
